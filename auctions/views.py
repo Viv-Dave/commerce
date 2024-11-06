@@ -1,14 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
-from .models import User
-
+from .models import User, Listing, Bid, Comment
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.all()
+    })
 
 
 def login_view(request):
@@ -61,3 +62,20 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+def auction(request, auction_id):
+    listing = get_object_or_404(Listing, listing_id=auction_id)
+    
+    latest_bid = Bid.objects.filter(product_id=listing).order_by('-bid_price').first()
+
+    comments = Comment.objects.filter(product_id=listing)
+
+    return render(request, "auctions/auction.html", {
+        "auction_item": listing.auction_item,
+        "price": listing.price,
+        "category": listing.category,
+        "bidding_price": latest_bid.bid_price if latest_bid else "No bids yet",
+        "bidder": latest_bid.username if latest_bid else "No bidders",
+        "comment": comments
+    })
+

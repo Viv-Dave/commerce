@@ -1,7 +1,16 @@
-{% extends "auctions/layout.html" %}
+{% extends "auctions/layout.html" %} {% block body %}
+<h2>Active Listings</h2>
+<ul>
+  {% for listing in listings %}
 
-{% block body %}
-    <h2>Active Listings</h2>
-
-    TODO
+  <li>
+    <a href="{% url 'auction' listing.listing_id %}"
+      >ID: {{ listing.listing_id }}</a
+    >
+    | Item: {{ listing.auction_item }} | Category: {{ listing.category }}
+  </li>
+  {% empty %}
+  <li>No active listings available.</li>
+  {% endfor %}
+</ul>
 {% endblock %}

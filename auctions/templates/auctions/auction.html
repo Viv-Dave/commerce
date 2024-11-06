@@ -1,0 +1,10 @@
+{% extends "auctions/layout.html" %} {% block body %}
+<h2>{{auction_item}}</h2>
+<p>Starting price: {{price}}</p>
+<p>Bidding price: {{bidding_price}}</p>
+<p>bidder:{{bidder}}</p>
+<h3>Comments</h3>
+<h6>{{commentator}}</h6>
+<p>{{comments}}</p>
+
+{% endblock %}
