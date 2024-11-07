@@ -9,9 +9,12 @@
     >
     | Item: {{ listing.auction_item }} | Category: {{ listing.category }}
   </li>
+  <form action="{% url 'add_watchlist' listing.listing_id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Add to Watchlist</button>
+  </form>
   {% empty %}
   <li>No active listings available.</li>
-  <button>Add to Watchlist</button>
   {% endfor %}
 </ul>
 {% endblock %}

@@ -1,9 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.exceptions import ValidationError
+
 class User(AbstractUser):
     user_name = models.BigAutoField(primary_key=True)
-
     def __str__(self):
         return f"{self.username}"
 
@@ -36,3 +36,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"On Product ID {self.product_id} User {self.username} comments {self.comment}"
+    
+class Watchlist(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    username = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
+    product_id = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="product_id")
+
+    def __str__(self):
+        return f"{self.username}'s watchlist {self.product_id}"

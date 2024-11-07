@@ -4,7 +4,9 @@
 <p>Bidding price: {{bidding_price}}</p>
 <p>bidder:{{bidder}}</p>
 <h3>Comments</h3>
-<h6>{{commentator}}</h6>
-<p>{{comments}}</p>
-
-{% endblock %}
+{% for comment in comment %}
+<div>
+  <p><strong>User:</strong> {{ comment.username.username }}</p>
+  <p><strong>Comment:</strong> {{ comment.comment }}</p>
+</div>
+{% endfor %} {% endblock %}
