@@ -68,7 +68,7 @@ def auction(request, auction_id):
     
     latest_bid = Bid.objects.filter(product_id=listing).order_by('-bid_price').first()
 
-    comments = Comment.objects.filter(product_id=listing)
+    comment = Comment.objects.filter(product_id = listing)
 
     return render(request, "auctions/auction.html", {
         "auction_item": listing.auction_item,
@@ -76,6 +76,6 @@ def auction(request, auction_id):
         "category": listing.category,
         "bidding_price": latest_bid.bid_price if latest_bid else "No bids yet",
         "bidder": latest_bid.username if latest_bid else "No bidders",
-        "comment": comments
+        "comment": comment   
     })
 
