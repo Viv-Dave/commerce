@@ -1,17 +1,10 @@
 {% extends "auctions/layout.html" %} {% block body %}
 <h2>{{auction_item}}</h2>
-<img
-  src="{{ listing.photo_url.url }}"
-  alt="{{ listing.auction_item }}"
-  style="max-width: 300px; height: 100px"
-/>
 <p>Starting price: {{price}}</p>
 <p>Bidding price: {{bidding_price}}</p>
 <p>bidder:{{bidder}}</p>
 <h3>Comments</h3>
-{% for comment in comment %}
-<div>
-  <p><strong>User:</strong> {{ comment.username.username }}</p>
-  <p><strong>Comment:</strong> {{ comment.comment }}</p>
-</div>
-{% endfor %}{% endblock %}
+<h6>{{commentator}}</h6>
+<p>{{comments}}</p>
+
+{% endblock %}
