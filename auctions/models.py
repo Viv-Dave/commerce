@@ -12,7 +12,7 @@ class Listing(models.Model):
     auction_item = models.CharField(max_length=64)
     price = models.IntegerField()
     category = models.CharField(max_length=64, default="General")
-    active_status = models.BooleanField(default=True)
+    active_status = models.CharField(max_length=64)
     photo_url  = models.ImageField(upload_to="Product_Images", default="abcd.jpg")
     def __str__(self):
         return f"ID: {self.listing_id} Item: {self.auction_item} Category: {self.category}"

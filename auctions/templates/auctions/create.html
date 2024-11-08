@@ -1,24 +1,30 @@
 {% extends "auctions/layout.html" %} {% block body %}
 <h1>Create a listing</h1>
-<form action="#" method="POST">
+<form
+  action="{% url 'create_listing' %}"
+  method="POST"
+  enctype="multipart/form-data"
+>
   {% csrf_token %}
   <div>
     <h5>Auction Item:</h5>
-    <input type="text" />
+    <input type="text" name="auction_item" />
     <h5>Price:</h5>
-    <input type="text" />
+    <input type="text" name="price" />
     <h5>Category:</h5>
-    <input type="text" />
+    <input type="text" name="category" />
     <h5>Active Status:</h5>
-    <select name="" id="">
-      <option value="yes">Yes</option>
+    <select name="active_status" id="">
+      <option value="Yes">Yes</option>
       <option value="No">No</option>
     </select>
     <h5>Photo:</h5>
-    <input type="file" name="" id="" />
+    <input type="file" name="photo_url" id="" />
   </div>
+  <button type="submit">Submit</button>
 </form>
 {% endblock %}
+
 <!-- {% url 'create_listing' %} -->
 <!-- class Listing(models.Model):
     listing_id = models.BigAutoField(primary_key=True)

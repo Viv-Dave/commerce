@@ -79,9 +79,7 @@ def auction(request, auction_id):
         "comment": comments
     })
 # Sections where login is required
-@login_required
-def create_listing(request):
-    return None
+
 @login_required
 def add_watchlist(request, auction_id):
     listing = get_object_or_404(Listing, listing_id=auction_id)
@@ -115,8 +113,40 @@ def see_watchlist(request, username):
 def create_auction(request, username):
     if request.user.username != username:
         return redirect('index')
+        # Do something
     
     return render(request, "auctions/create.html")
+@login_required
+def create_listing(request):
+    if request.method == "POST":
+        auction_item = request.POST["auction_item"]
+        price = request.POST["price"]
+        category = request.POST["category"]
+        active_status = request.POST["active_status"]
+        photo_url = request.POST["photo_url"]
 
+    try:
+        auction, created = Listing.objects.get_or_create(
+            auction_item=auction_item,
+            price=price,
+            category=category,
+            active_status=active_status,
+            photo_url=photo_url
+        )
+        auction.save()
+        return HttpResponse("Auction Item created!")
+    except Exception as e:
+        return HttpResponse(f"Error: {str(e)}")
+    else:
+        return render(request, "auctions/create.html")
     
+# class Listing(models.Model):
+#     listing_id = models.BigAutoField(primary_key=True)
+#     auction_item = models.CharField(max_length=64)
+#     price = models.IntegerField()
+#     category = models.CharField(max_length=64, default="General")
+#     active_status = models.CharField(max_length=64)
+#     photo_url  = models.ImageField(upload_to="Product_Images", default="abcd.jpg")
+#     def __str__(self):
+#         return f"ID: {self.listing_id} Item: {self.auction_item} Category: {self.category}"
         
