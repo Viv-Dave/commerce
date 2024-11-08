@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %} {% block body %}
+<h1>Create a listing</h1>
+<form action="#" method="POST">
+  {% csrf_token %}
+  <div>
+    <h5>Auction Item:</h5>
+    <input type="text" />
+    <h5>Price:</h5>
+    <input type="text" />
+    <h5>Category:</h5>
+    <input type="text" />
+    <h5>Active Status:</h5>
+    <select name="" id="">
+      <option value="yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+    <h5>Photo:</h5>
+    <input type="file" name="" id="" />
+  </div>
+</form>
+{% endblock %}
+<!-- {% url 'create_listing' %} -->
+<!-- class Listing(models.Model):
+    listing_id = models.BigAutoField(primary_key=True)
+    auction_item = models.CharField(max_length=64)
+    price = models.IntegerField()
+    category = models.CharField(max_length=64, default="General")
+    active_status = models.BooleanField(default=True)
+    photo_url  = models.ImageField(upload_to="Product_Images", default="abcd.jpg") -->

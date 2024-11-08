@@ -111,7 +111,12 @@ def see_watchlist(request, username):
     return render(request, "auctions/watchlist.html", {
         "watchlist": watchlist_items
     })
-
+@login_required
+def create_auction(request, username):
+    if request.user.username != username:
+        return redirect('index')
+    
+    return render(request, "auctions/create.html")
 
     
         
