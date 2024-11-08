@@ -81,7 +81,27 @@ def auction(request, auction_id):
 # Sections where login is required
 @login_required
 def create_listing(request):
-    return None
+    if request.method == "POST":
+        auction_item = request.POST["auction_item"]
+        price = request.POST["price"]
+        category = request.POST["category"]
+        active_status = request.POST["active_status"]
+        photo_url = request.FILES.get("photo_url", None)
+
+        try:
+            auction = Listing.objects.create(
+                auction_item=auction_item,
+                price=price,
+                category=category,
+                active_status=active_status,
+                photo_url=photo_url
+            )
+            auction.save()
+            return HttpResponse("Auction Item created!")
+        except Exception as e:
+            return HttpResponse(f"Error: {str(e)}")
+    else:
+        return render(request, "auctions/create.html")
 @login_required
 def add_watchlist(request, auction_id):
     listing = get_object_or_404(Listing, listing_id=auction_id)

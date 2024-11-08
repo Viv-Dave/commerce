@@ -1,22 +1,23 @@
 {% extends "auctions/layout.html" %} {% block body %}
 <h1>Create a listing</h1>
-<form action="#" method="POST">
+<form action="{% url 'create_listing' %}" method="POST">
   {% csrf_token %}
   <div>
     <h5>Auction Item:</h5>
-    <input type="text" />
+    <input type="text" name="auction_item" />
     <h5>Price:</h5>
-    <input type="text" />
+    <input type="text" name="price" />
     <h5>Category:</h5>
-    <input type="text" />
+    <input type="text" name=" category" />
     <h5>Active Status:</h5>
-    <select name="" id="">
+    <select name="active_status" id="">
       <option value="yes">Yes</option>
       <option value="No">No</option>
     </select>
     <h5>Photo:</h5>
-    <input type="file" name="" id="" />
+    <input type="file" name="photo_url" id="" />
   </div>
+  <button>Submit</button>
 </form>
 {% endblock %}
 <!-- {% url 'create_listing' %} -->
