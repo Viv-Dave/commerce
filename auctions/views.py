@@ -97,7 +97,8 @@ def create_listing(request):
                 photo_url=photo_url
             )
             auction.save()
-            return HttpResponse("Auction Item created!")
+            return redirect('index')
+        
         except Exception as e:
             return HttpResponse(f"Error: {str(e)}")
     else:
@@ -137,6 +138,14 @@ def create_auction(request, username):
         return redirect('index')
     
     return render(request, "auctions/create.html")
+
+@login_required
+def your_listings(request, username):
+    return None
+
+@login_required
+def close_listing(request, username):
+    return None
 
     
         
