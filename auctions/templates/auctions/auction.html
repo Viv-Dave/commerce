@@ -1,12 +1,33 @@
 {% extends "auctions/layout.html" %} {% block body %}
-<h2>{{auction_item}}</h2>
-<p>Starting price: {{price}}</p>
-<p>Bidding price: {{bidding_price}}</p>
-<p>bidder:{{bidder}}</p>
+<h2>{{ auction_item }}</h2>
+<p>Starting price: ${{ price }}</p>
+<p>Current highest bid: ${{ bidding_price }}</p>
+<p>Current highest bidder: {{ bidder }}</p>
+
+{% if active_status %}
+<h3>Place a Bid</h3>
+<form action="{% url 'place_bid' listing_id=auction_id %}" method="post">
+  {% csrf_token %}
+  <label for="bid_amount">Enter your bid:</label>
+  <input
+    type="number"
+    name="bid_amount"
+    id="bid_amount"
+    min="{{ bidding_price }}"
+    required
+  />
+  <button type="submit" class="btn btn-success">Place Bid</button>
+</form>
+{% else %}
+<p class="alert alert-warning">This auction is closed</p>
+{% endif %}
+
 <h3>Comments</h3>
-{% for comment in comment %}
+{% if comments %} {% for comment in comments %}
 <div>
   <p><strong>User:</strong> {{ comment.username.username }}</p>
   <p><strong>Comment:</strong> {{ comment.comment }}</p>
 </div>
-{% endfor %} {% endblock %}
+{% endfor %} {% else %}
+<p>No comments yet.</p>
+{% endif %} {% endblock %}

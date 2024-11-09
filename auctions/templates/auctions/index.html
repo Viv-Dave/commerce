@@ -1,8 +1,7 @@
 {% extends "auctions/layout.html" %} {% block body %}
 <h2>Active Listings</h2>
 <ul>
-  {% for listing in listings %}
-
+  {% for listing in listings %} {% if listing.active_status %}
   <li>
     <a href="{% url 'auction' listing.listing_id %}"
       >ID: {{ listing.listing_id }}</a
@@ -13,7 +12,7 @@
     {% csrf_token %}
     <button type="submit" class="btn btn-primary">Add to Watchlist</button>
   </form>
-  {% empty %}
+  {% endif %} {% empty %}
   <li>No active listings available.</li>
   {% endfor %}
 </ul>

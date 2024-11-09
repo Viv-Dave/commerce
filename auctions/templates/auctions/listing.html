@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %} {% block body %}
+<h1>Your Listings</h1>
+<ul>
+  {% for listing in listings %}
+  <li>
+    {{ listing.auction_item }} - {% if listing.active_status %}
+    <a href="{% url 'close_listing' listing.listing_id %}">Close</a>
+    {% else %} Closed {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

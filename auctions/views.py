@@ -63,21 +63,23 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-def auction(request, auction_id):
-    listing = get_object_or_404(Listing, listing_id=auction_id)
-    
+def auction(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
     latest_bid = Bid.objects.filter(product_id=listing).order_by('-bid_price').first()
-
     comments = Comment.objects.filter(product_id=listing)
-
-    return render(request, "auctions/auction.html", {
+    
+    context = {
         "auction_item": listing.auction_item,
         "price": listing.price,
         "category": listing.category,
-        "bidding_price": latest_bid.bid_price if latest_bid else "No bids yet",
+        "bidding_price": latest_bid.bid_price if latest_bid else listing.price,
         "bidder": latest_bid.username if latest_bid else "No bidders",
-        "comment": comments
-    })
+        "comments": comments,
+        "auction_id": listing_id,
+        "active_status": listing.active_status
+    }
+    
+    return render(request, "auctions/auction.html", context)
 # Sections where login is required
 @login_required
 def create_listing(request):
@@ -94,7 +96,8 @@ def create_listing(request):
                 price=price,
                 category=category,
                 active_status=active_status,
-                photo_url=photo_url
+                photo_url=photo_url,
+                owner = request.user
             )
             auction.save()
             return redirect('index')
@@ -141,11 +144,49 @@ def create_auction(request, username):
 
 @login_required
 def your_listings(request, username):
-    return None
+    if request.user.username != username:
+        return redirect('index')
+
+    user_listings = Listing.objects.filter(owner=request.user)
+    return render(request, "auctions/listing.html", {
+        "listings": user_listings
+    })
 
 @login_required
-def close_listing(request, username):
-    return None
+def close_listing(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id, owner=request.user)
 
+    if request.method == "POST":
+        listing.active_status = False
+        listing.save()
+        return redirect('your_listings', username=request.user.username)
     
-        
+    return render(request, "auctions/close_listing.html", {
+        "listing": listing
+    })
+
+@login_required
+def place_bid(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    current_highest_bid = Bid.objects.filter(product_id=listing).order_by('-bid_price').first()
+    
+    if request.method == "POST":
+        bid_amount = int(request.POST["bid_amount"])
+        # Check if the bid is higher than both the starting price and current highest bid
+        if current_highest_bid:
+            min_bid = current_highest_bid.bid_price
+        else:
+            min_bid = listing.price
+            
+        if bid_amount > min_bid:
+            # Create the new bid
+            Bid.objects.create(
+                username=request.user,
+                product_id=listing,
+                bid_price=bid_amount
+            )
+            return redirect('auction', listing_id=listing_id)
+        else:
+            return HttpResponse("Bid must be higher than the current price!")
+    else:
+        return redirect('auction', listing_id=listing_id)
